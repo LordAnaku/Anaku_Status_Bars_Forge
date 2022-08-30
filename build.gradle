@@ -117,13 +117,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
+    maven { url "https://maven.shedaniel.me/" }
 }
 
 dependencies {
@@ -131,6 +125,10 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft "net.minecraftforge:forge:${project.forge_version}"
+
+
+    // Cloth Config
+    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -149,9 +147,9 @@ dependencies {
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : "anaku_status_bars",
+                "Specification-Title"     : project.archives_base_name,
                 "Specification-Vendor"    : "LordAnaku",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Version"   : project.version,
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "LordAnaku",

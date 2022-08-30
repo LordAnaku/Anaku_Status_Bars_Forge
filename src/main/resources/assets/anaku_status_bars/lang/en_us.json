@@ -1,0 +1,53 @@
+{
+  "key.categories.anaku_status_bars": "Anaku's Status Bars",
+  "key.anaku_status_bars.menu": "Open Settings Menu",
+
+  "title.anaku_status_bars.config": "Anaku's Status Bars Configuration",
+
+  "category.anaku_status_bars.general": "Render Toggles",
+  "option.anaku_status_bars.vanilla_textures": "Enable Vanilla Textures",
+  "option.anaku_status_bars.enable_health_bar": "Enable Health Bar",
+  "option.anaku_status_bars.enable_health_absorption": "Enable Health Absorption",
+  "option.anaku_status_bars.enable_air_bar": "Enable Air Bar",
+  "option.anaku_status_bars.enable_armor_bar": "Enable Armor Bar",
+  "option.anaku_status_bars.enable_food_bar": "Enable Food Bar",
+  "option.anaku_status_bars.enable_saturation_bar": "Enable Saturation Bar",
+  "option.anaku_status_bars.enable_exhaustion_bar": "Enable Exhaustion Bar",
+  "option.anaku_status_bars.enable_mount_health_bar": "Enable Mount Health Bar",
+
+  "category.anaku_status_bars.icon": "Icon Toggles",
+  "option.anaku_status_bars.enable_health_icon": "Enable Health Icon",
+  "option.anaku_status_bars.enable_air_icon": "Enable Air Icon",
+  "option.anaku_status_bars.enable_armor_icon": "Enable Armor Icon",
+  "option.anaku_status_bars.enable_food_icon": "Enable Food Icon",
+  "option.anaku_status_bars.enable_mount_health_icon": "Enable Mount Health Icon",
+
+  "category.anaku_status_bars.color": "Color",
+  "option.anaku_status_bars.health_bar_color": "Health Bar Color",
+  "option.anaku_status_bars.health_absorption_bar_color": "Health Absorption Bar Color",
+  "option.anaku_status_bars.air_color": "Air Bar Color",
+  "option.anaku_status_bars.color_armor": "Armor Bar Color",
+  "option.anaku_status_bars.food_color": "Food Bar Color",
+  "option.anaku_status_bars.saturation_color": "Saturation Bar Color",
+  "option.anaku_status_bars.mount_health_color": "Mount Health Bar Color",
+
+  "category.anaku_status_bars.alpha": "Alpha",
+  "option.anakus_status_bars.alpha_tooltip": "The alpha of the status bar, from 0 to 1",
+  "option.anaku_status_bars.health_bar_alpha": "Health Bar Alpha",
+  "option.anaku_status_bars.health_absorption_bar_alpha": "Health Absorption Bar Alpha",
+  "option.anaku_status_bars.air_alpha": "Air Bar Alpha",
+  "option.anaku_status_bars.alpha_armor": "Armor Bar Alpha",
+  "option.anaku_status_bars.food_alpha": "Food Bar Alpha",
+  "option.anaku_status_bars.saturation_alpha": "Saturation Bar Alpha",
+  "option.anaku_status_bars.exhaustion_alpha": "Exhaustion Bar Alpha",
+  "option.anaku_status_bars.mount_health_alpha": "Mount Health Bar Alpha",
+
+
+  "category.anaku_status_bars.position": "Position",
+  "option.anaku_status_bars.left_order": "Left Column Render Order",
+  "option.anaku_status_bars.right_order": "Right Column Render Order",
+  "option.anaku_status_bars.left_y_offset": "Left Column Y Offset",
+  "option.anaku_status_bars.right_y_offset": "Right Column Y Offset",
+  "option.anaku_status_bars.left_x_offset": "Left Column X Offset",
+  "option.anaku_status_bars.right_x_offset": "Right Column X Offset"
+}
