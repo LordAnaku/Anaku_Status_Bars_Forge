@@ -28,14 +28,6 @@ public class RenderHudHelper {
         Arrays.stream(iHudElements).forEach(hudElement -> registry.put(hudElement.name(), hudElement));
     }
 
-    public static void setOrderDefaults(String id, boolean side) {
-        if (side) {
-            Settings.LEFT_ORDER_DEFAULT.add(id);
-        } else {
-            Settings.RIGHT_ORDER_DEFAULT.add(id);
-        }
-    }
-
     public static void resetIncrements() {
         leftPosYIncrement = -Settings.positionSettings.get("left_y_offset");
         rightPosYIncrement = -Settings.positionSettings.get("right_y_offset");

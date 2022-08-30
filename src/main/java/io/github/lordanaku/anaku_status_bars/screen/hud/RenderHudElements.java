@@ -6,11 +6,10 @@ import io.github.lordanaku.anaku_status_bars.utils.interfaces.IHudElement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.world.entity.player.Player;
-import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 
 @SuppressWarnings("unused")
-public class RenderHudElements extends ForgeGui {
+public class RenderHudElements {
     private static int yModIncrement = 10;
     private static int posXLeftOffset = 91;
     private static int posXRightOffset = 10;
@@ -40,10 +39,6 @@ public class RenderHudElements extends ForgeGui {
             }
         }
     });
-
-    public RenderHudElements(Minecraft mc) {
-        super(mc);
-    }
 
     /**
      * This method is used to set the amount the elements will offset upwards for every element rendered.
