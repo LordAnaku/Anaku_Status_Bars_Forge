@@ -5,12 +5,10 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import io.github.lordanaku.anaku_status_bars.screen.hud.RenderHudHelper;
 import io.github.lordanaku.anaku_status_bars.utils.ColorUtils;
 import io.github.lordanaku.anaku_status_bars.utils.Settings;
-import io.github.lordanaku.anaku_status_bars.utils.TextureRecords;
 import io.github.lordanaku.anaku_status_bars.utils.interfaces.IHudElement;
 import io.github.lordanaku.anaku_status_bars.utils.records.HudElementType;
 import io.github.lordanaku.anaku_status_bars.utils.records.TextureRecord;
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.resources.ResourceLocation;
 
 public class RenderHudFunctions {
 
@@ -23,17 +21,24 @@ public class RenderHudFunctions {
     public static void registerModHudElement(HudElementType type, IHudElement hudElement) {
         if(!RenderHudHelper.getHudElementRegistry().contains(hudElement)) {
             RenderHudHelper.registerHudElements(hudElement);
-            Settings.shouldRenderSettings.put(type.name(), type.shouldRender());
-            Settings.shouldRenderIconSettings.put(type.name(), type.shouldRenderIcon());
-            Settings.colorSettings.put(type.name(), type.color());
-            Settings.alphaSettings.put(type.name(), type.alpha());
+            if (!Settings.shouldRenderSettings.containsKey(type.name())) {
+                Settings.shouldRenderSettings.put(type.name(), type.shouldRender());
+                Settings.shouldRenderIconSettings.put(type.name(), type.shouldRenderIcon());
+                Settings.colorSettings.put(type.name(), type.color());
+                Settings.alphaSettings.put(type.name(), type.alpha());
+            }
             if (type.side()) {
-                Settings.sideOrderSettings.get("left").add(type.name());
+                if (!Settings.sideOrderSettings.get("left").contains(type.name()) && !Settings.sideOrderSettings.get("right").contains(type.name())) {
+                    Settings.sideOrderSettings.get("left").add(type.name());
+                }
                 Settings.LEFT_ORDER_DEFAULT.add(type.name());
             } else {
-                Settings.sideOrderSettings.get("right").add(type.name());
+                if (!Settings.sideOrderSettings.get("left").contains(type.name()) && !Settings.sideOrderSettings.get("right").contains(type.name())) {
+                    Settings.sideOrderSettings.get("right").add(type.name());
+                }
                 Settings.RIGHT_ORDER_DEFAULT.add(type.name());
             }
+            RenderHudHelper.setupHudElements();
         }
     }
 
@@ -122,15 +127,6 @@ public class RenderHudFunctions {
                     textureRecord.width(), textureRecord.height(),
                     textureRecord.maxWidth(), textureRecord.maxHeight());
         }
-    }
-
-    /**
-     * Sets default texture for the bars. (only call if you wish to set your own texture for vanilla hud elements)
-     * @param texture - New texture for the bars.
-     */
-    @SuppressWarnings("unused")
-    public static void setDefaultTexture(ResourceLocation texture) {
-        TextureRecords.statusBarTextures = texture;
     }
 
     private static void drawProgress(PoseStack poseStack, boolean side, int posYMod, TextureRecord textureRecord, int progress) {

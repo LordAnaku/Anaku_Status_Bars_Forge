@@ -1,14 +1,16 @@
 plugins {
     id 'net.minecraftforge.gradle' version '5.1.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+    id 'maven-publish'
+    id 'com.jfrog.artifactory'
 }
 
 
-group = project.maven_group
-version = project.mod_version
+group = 'io.github.lordanaku'
+version = '0.1.4-1.19.2'
 
 java {
-    archivesBaseName = project.archives_base_name
+    archivesBaseName = 'anaku_status_bars'
     toolchain.languageVersion = JavaLanguageVersion.of(17)
 }
 
@@ -26,7 +28,9 @@ minecraft {
     //
     // Use non-default mappings at your own risk. They may not always work.
     // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'parchment', version: project.parchment_mappings_version
+    // mappings channel: 'official', version: '1.19.2'
+
+    mappings channel: 'parchment', version: '2022.08.14-1.19.2'
 
     // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
 
@@ -124,11 +128,12 @@ dependencies {
     // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft' it is assumed
     // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft "net.minecraftforge:forge:${project.forge_version}"
+    minecraft "net.minecraftforge:forge:1.19.2-43.1.3"
 
 
     // Cloth Config
-    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:${project.cloth_config_version}")
+    implementation fg.deobf("me.shedaniel.cloth:cloth-config-forge:8.0.75")
+
 
     // Real mod deobf dependency examples - these get remapped to your current mappings
     // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
@@ -143,13 +148,21 @@ dependencies {
     // http://www.gradle.org/docs/current/userguide/dependency_management.html
 }
 
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withJavadocJar()
+    withSourcesJar()
+}
+
 // Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
-                "Specification-Title"     : project.archives_base_name,
+                "Specification-Title"     : archivesBaseName,
                 "Specification-Vendor"    : "LordAnaku",
-                "Specification-Version"   : project.version,
+                "Specification-Version"   : version,
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "LordAnaku",
@@ -159,6 +172,64 @@ jar {
 }
 
 jar.finalizedBy('reobfJar')
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            groupId = group
+            artifactId = archivesBaseName
+            version = version
+            artifact jar
+            // if you're generating sources and javadocs you can also do these
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = archivesBaseName
+                description = "This mod replaced the default status bars with a more modern look, as well as acts as a base for several of my other mods."
+                url = "https://github.com/LordAnaku/Anaku_Status_Bars_Forge"
+                inceptionYear = "2022"
+
+                licenses {
+                    license {
+                        name = "GPL-3.0"
+                        url = "https://opensource.org/licenses/GPL-3.0"
+                    }
+                }
+                developers {
+                    developer {
+                        id = "lordanaku"
+                        name = "LordAnaku"
+                        email = "the.iron.legion.modding@gmail.com"
+                    }
+                }
+                scm {
+                    connection = "scm:git:git:github.com/LordAnaku/Anaku_Status_Bars_Forge.git"
+                    developerConnection = "scm:git:ssh:github.com/LordAnaku/Anaku_Status_Bars_Forge.git"
+                    url = "https://github.com/LordAnaku/Anaku_Status_Bars_Forge"
+                }
+            }
+        }
+    }
+}
+
+artifactory {
+    contextUrl = "${artifactory_contextUrl}"
+    publish {
+        repository {
+            repoKey = "mods-gradle-dev-local"
+
+            username = "${artifactory_user}"
+            password = "${artifactory_password}"
+        }
+        defaults {
+            publications("mavenJava")
+
+            publishArtifacts = true
+            publishPom = true
+        }
+    }
+}
 
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation

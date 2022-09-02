@@ -17,10 +17,14 @@ public class RenderHudHelper {
     public static void setupHudElements() {
         hudElementRegistry.clear();
         for (String iHudElement : Settings.sideOrderSettings.get("left")) {
-            hudElementRegistry.add(registry.get(iHudElement).setRenderSide(true));
+            if (registry.containsKey(iHudElement)) {
+                hudElementRegistry.add(registry.get(iHudElement).setRenderSide(true));
+            }
         }
         for (String iHudElement : Settings.sideOrderSettings.get("right")) {
-            hudElementRegistry.add(registry.get(iHudElement).setRenderSide(false));
+            if (registry.containsKey(iHudElement)) {
+                hudElementRegistry.add(registry.get(iHudElement).setRenderSide(false));
+            }
         }
     }
 

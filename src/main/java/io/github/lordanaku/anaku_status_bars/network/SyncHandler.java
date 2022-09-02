@@ -75,6 +75,7 @@ public class SyncHandler
 
         lastSaturationLevels.remove(event.getEntity().getUUID());
         lastExhaustionLevels.remove(event.getEntity().getUUID());
+
     }
 }
 

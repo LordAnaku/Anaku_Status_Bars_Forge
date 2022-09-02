@@ -3,6 +3,7 @@ package io.github.lordanaku.anaku_status_bars;
 import com.mojang.logging.LogUtils;
 import io.github.lordanaku.anaku_status_bars.network.SyncHandler;
 import io.github.lordanaku.anaku_status_bars.screen.gui.ConfigFileHandler;
+import io.github.lordanaku.anaku_status_bars.screen.gui.ConfigModMenu;
 import io.github.lordanaku.anaku_status_bars.screen.hud.RenderHudHelper;
 import io.github.lordanaku.anaku_status_bars.screen.hud.elements.*;
 import io.github.lordanaku.anaku_status_bars.utils.Settings;
@@ -34,6 +35,8 @@ public class AnakuStatusBarsCore {
         SyncHandler.init();
         /* * register Settings * */
         Settings.registerSettings();
+        /* * register Config * */
+        ConfigModMenu.registerModsPage();
         /* * Read Settings * */
         ConfigFileHandler.readFromConfig();
         /* * Register Hud Elements * */

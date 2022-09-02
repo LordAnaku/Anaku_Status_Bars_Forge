@@ -90,8 +90,8 @@ public final class Settings {
         alphaSettings.put(MOUNT_HEALTH.name(), MOUNT_HEALTH.alpha());
 
         // * Side Order Settings * //
-        sideOrderSettings.put("left", LEFT_ORDER_DEFAULT);
-        sideOrderSettings.put("right", RIGHT_ORDER_DEFAULT);
+        sideOrderSettings.put("left", new ArrayList<>(Arrays.asList(HEALTH.name(), ARMOR.name())));
+        sideOrderSettings.put("right", new ArrayList<>(Arrays.asList(FOOD.name(), AIR.name(), MOUNT_HEALTH.name())));
 
         // * Position Settings * //
         positionSettings.put("left_y_offset", LEFT_DEFAULT);

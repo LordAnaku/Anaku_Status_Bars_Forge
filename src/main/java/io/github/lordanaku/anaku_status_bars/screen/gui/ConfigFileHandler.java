@@ -26,25 +26,41 @@ public class ConfigFileHandler {
         if (root.has("render_settings")) {
             JsonObject object = root.get("render_settings").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                Settings.shouldRenderSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
+                if (Settings.shouldRenderSettings.containsKey(entry.getKey())) {
+                    Settings.shouldRenderSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
+                } else {
+                    Settings.shouldRenderSettings.put(entry.getKey(), entry.getValue().getAsBoolean());
+                }
             }
         }
         if(root.has("color_settings")) {
             JsonObject object = root.get("color_settings").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                Settings.colorSettings.replace(entry.getKey(), entry.getValue().getAsInt());
+                if (Settings.colorSettings.containsKey(entry.getKey())) {
+                    Settings.colorSettings.replace(entry.getKey(), entry.getValue().getAsInt());
+                } else {
+                    Settings.colorSettings.put(entry.getKey(), entry.getValue().getAsInt());
+                }
             }
         }
         if(root.has("alpha_settings")) {
             JsonObject object = root.get("alpha_settings").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                Settings.alphaSettings.replace(entry.getKey(), entry.getValue().getAsFloat());
+                if (Settings.alphaSettings.containsKey(entry.getKey())) {
+                    Settings.alphaSettings.replace(entry.getKey(), entry.getValue().getAsFloat());
+                } else {
+                    Settings.alphaSettings.put(entry.getKey(), entry.getValue().getAsFloat());
+                }
             }
         }
         if(root.has("render_icon_settings")) {
             JsonObject object = root.get("render_icon_settings").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
-                Settings.shouldRenderIconSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
+                if (Settings.shouldRenderIconSettings.containsKey(entry.getKey())) {
+                    Settings.shouldRenderIconSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
+                } else {
+                    Settings.shouldRenderIconSettings.put(entry.getKey(), entry.getValue().getAsBoolean());
+                }
             }
         }
         if(root.has("render_side")) {
