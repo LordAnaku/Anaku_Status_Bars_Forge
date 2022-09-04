@@ -25,7 +25,9 @@ public class RenderHudFunctions {
             if (!Settings.shouldRenderSettings.containsKey(type.name())) {
                 Settings.shouldRenderSettings.put(type.name(), type.shouldRender());
                 Settings.shouldRenderIconSettings.put(type.name(), type.shouldRenderIcon());
+                Settings.shouldRenderTextSettings.put(type.name(), type.shouldRenderText());
                 Settings.colorSettings.put(type.name(), type.color());
+                Settings.textColorSettings.put(type.name(), type.color());
                 Settings.alphaSettings.put(type.name(), type.alpha());
             }
             if (type.side()) {
