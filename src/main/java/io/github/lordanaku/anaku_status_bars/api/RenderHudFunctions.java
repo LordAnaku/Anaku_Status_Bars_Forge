@@ -8,6 +8,7 @@ import io.github.lordanaku.anaku_status_bars.utils.Settings;
 import io.github.lordanaku.anaku_status_bars.utils.interfaces.IHudElement;
 import io.github.lordanaku.anaku_status_bars.utils.records.HudElementType;
 import io.github.lordanaku.anaku_status_bars.utils.records.TextureRecord;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
 
 public class RenderHudFunctions {
@@ -129,6 +130,25 @@ public class RenderHudFunctions {
         }
     }
 
+    /**
+     * Draws the text for the Hud Element.
+     * @param text - the text to draw.
+     * @param side - true if the bar is on the left side of the screen, false if on the right side.
+     * @param icon - rather or not the icon is being drawn.
+     * @param posYMod - the amount you want to add to the base -40 y position.
+     * @param color - the color of the text. (Hex Value)
+     * @param barWidth - the width of the bar so method can determine offset.
+     */
+    public static void drawText(PoseStack poseStack, String text, boolean side, boolean icon, int posYMod, int color, int barWidth) {
+        int finalSide = (side) ? RenderHudHelper.getPosX(true) - (Minecraft.getInstance().font.width(text) + 1) : RenderHudHelper.getPosX(false) + (barWidth + 1);
+
+        if (icon) {
+            finalSide = (side) ? finalSide - 10 : finalSide + 10;
+        }
+
+        GuiComponent.drawString(poseStack, Minecraft.getInstance().font, text, finalSide, RenderHudHelper.getPosY() + posYMod + 1, color);
+    }
+
     private static void drawProgress(PoseStack poseStack, boolean side, int posYMod, TextureRecord textureRecord, int progress) {
         if (side) {
             GuiComponent.blit(poseStack,
@@ -144,5 +164,4 @@ public class RenderHudFunctions {
                     textureRecord.maxWidth(), textureRecord.maxHeight());
         }
     }
-
 }

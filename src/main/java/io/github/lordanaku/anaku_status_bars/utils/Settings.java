@@ -9,11 +9,11 @@ import java.util.Map;
 
 public final class Settings {
     /* * Element Records * */
-    public static final HudElementType HEALTH = new HudElementType("health", true, true, true, 0xff1313, 1);
-    public static final HudElementType FOOD = new HudElementType("hunger", true, false, true, 0x9d6d43, 1);
-    public static final HudElementType ARMOR = new HudElementType("armor", true, true, true, 0xb8b9c4, 1);
-    public static final HudElementType AIR = new HudElementType("air", true, false, true, 0x0094ff, 1);
-    public static final HudElementType MOUNT_HEALTH = new HudElementType("mount_health", true, false, true, 0xda662c, 1);
+    public static final HudElementType HEALTH = new HudElementType("health", true, true, true, false, 0xff1313, 1);
+    public static final HudElementType FOOD = new HudElementType("hunger", true, false, true, false, 0x9d6d43, 1);
+    public static final HudElementType ARMOR = new HudElementType("armor", true, true, true, false, 0xb8b9c4, 1);
+    public static final HudElementType AIR = new HudElementType("air", true, false, true, false, 0x0094ff, 1);
+    public static final HudElementType MOUNT_HEALTH = new HudElementType("mount_health", true, false, true, false, 0xda662c, 1);
 
     /* * Default Settings * */
     public static boolean shouldUseVanillaTextures = false;
@@ -34,10 +34,13 @@ public final class Settings {
     public static final Map<String, Boolean> shouldRenderSettings = new HashMap<>();
     public static final Map<String, Boolean> sideSettings = new HashMap<>();
     public static final Map<String, Boolean> shouldRenderIconSettings = new HashMap<>();
+    public static final Map<String, Boolean> shouldRenderTextSettings = new HashMap<>();
     public static final Map<String, Integer> colorSettings = new HashMap<>();
+    public static final Map<String, Integer> textColorSettings = new HashMap<>();
     public static final Map<String, Float> alphaSettings = new HashMap<>();
     public static final Map<String, ArrayList<String>> sideOrderSettings = new HashMap<>();
     public static final Map<String, Integer> positionSettings = new HashMap<>();
+
 
     /* * Register Settings * */
     public static void registerSettings() {
@@ -65,6 +68,13 @@ public final class Settings {
         shouldRenderIconSettings.put(AIR.name(), AIR.shouldRenderIcon());
         shouldRenderIconSettings.put(MOUNT_HEALTH.name(), MOUNT_HEALTH.shouldRenderIcon());
 
+        /* * Should Render Text Settings * */
+        shouldRenderTextSettings.put(HEALTH.name(), HEALTH.shouldRenderText());
+        shouldRenderTextSettings.put(FOOD.name(), FOOD.shouldRenderText());
+        shouldRenderTextSettings.put(ARMOR.name(), ARMOR.shouldRenderText());
+        shouldRenderTextSettings.put(AIR.name(), AIR.shouldRenderText());
+        shouldRenderTextSettings.put(MOUNT_HEALTH.name(), MOUNT_HEALTH.shouldRenderText());
+
         /* * Color Settings * */
         colorSettings.put(HEALTH.name(), HEALTH.color());
         colorSettings.put(HEALTH.name() + "_absorption", ABSORPTION_COLOR_DEFAULT);
@@ -78,6 +88,15 @@ public final class Settings {
         colorSettings.put(ARMOR.name(), ARMOR.color());
         colorSettings.put(AIR.name(), AIR.color());
         colorSettings.put(MOUNT_HEALTH.name(), MOUNT_HEALTH.color());
+
+        /* * Text Color Settings * */
+        textColorSettings.put(HEALTH.name(), HEALTH.color());
+        textColorSettings.put(HEALTH.name() + "_absorption", ABSORPTION_COLOR_DEFAULT);
+        textColorSettings.put(FOOD.name(), FOOD.color());
+        textColorSettings.put(FOOD.name() + "_saturation", SATURATION_COLOR_DEFAULT);
+        textColorSettings.put(ARMOR.name(), ARMOR.color());
+        textColorSettings.put(AIR.name(), AIR.color());
+        textColorSettings.put(MOUNT_HEALTH.name(), MOUNT_HEALTH.color());
 
         /* * Alpha Settings * */
         alphaSettings.put(HEALTH.name(), HEALTH.alpha());

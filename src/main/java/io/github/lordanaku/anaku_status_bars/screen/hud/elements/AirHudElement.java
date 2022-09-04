@@ -42,6 +42,13 @@ public class AirHudElement implements IHudElement {
     }
 
     @Override
+    public void renderText(PoseStack poseStack) {
+        assert Minecraft.getInstance().player != null; Player player = Minecraft.getInstance().player;
+        RenderHudFunctions.drawText(poseStack, String.valueOf(Math.round(player.getAirSupply())), getSide(), shouldRenderIcon(), RenderHudHelper.getPosYMod(getSide()), Settings.textColorSettings.get(AIR.name()), 81);
+
+    }
+
+    @Override
     public boolean getSide() {
         return this.renderSide;
     }
@@ -65,7 +72,12 @@ public class AirHudElement implements IHudElement {
     }
 
     @Override
-    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory colorCategory, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
+    public boolean shouldRenderText() {
+        return shouldRender() && Settings.shouldRenderTextSettings.get(AIR.name());
+    }
+
+    @Override
+    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory textCategory, ConfigCategory colorCategory, ConfigCategory textColorSettings, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
         BooleanListEntry enableAirBar = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_air_bar"), Settings.shouldRenderSettings.get(AIR.name()))
                 .setDefaultValue(AIR.shouldRender())
                 .setSaveConsumer(value -> Settings.shouldRenderSettings.replace(AIR.name(), value))
@@ -78,11 +90,23 @@ public class AirHudElement implements IHudElement {
                 .build();
         iconCategory.addEntry(enableAirIcon);
 
+        BooleanListEntry enableAirText = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_air_text"), Settings.shouldRenderTextSettings.get(AIR.name()))
+                .setDefaultValue(AIR.shouldRenderText())
+                .setSaveConsumer(value -> Settings.shouldRenderTextSettings.replace(AIR.name(), value))
+                .build();
+        textCategory.addEntry(enableAirText);
+
         ColorEntry airColor = builder.startColorField(Component.translatable("option.anaku_status_bars.air_color"), Settings.colorSettings.get(AIR.name()))
                 .setDefaultValue(AIR.color())
                 .setSaveConsumer(value -> Settings.colorSettings.replace(AIR.name(), value))
                 .build();
         colorCategory.addEntry(airColor);
+
+        ColorEntry airTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.air_text_color"), Settings.textColorSettings.get(AIR.name()))
+                .setDefaultValue(AIR.color())
+                .setSaveConsumer(value -> Settings.textColorSettings.replace(AIR.name(), value))
+                .build();
+        textColorSettings.addEntry(airTextColor);
 
         FloatListEntry airAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.air_alpha"), Settings.alphaSettings.get(AIR.name()))
                 .setDefaultValue(AIR.alpha())

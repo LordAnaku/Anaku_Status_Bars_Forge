@@ -21,7 +21,9 @@ public class Config{
 
         ConfigCategory mainCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.general"));
         ConfigCategory iconCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.icon"));
+        ConfigCategory textCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.text"));
         ConfigCategory colorCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.color"));
+        ConfigCategory textColorSettings = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.text_color"));
         ConfigCategory alphaCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.alpha"));
         ConfigCategory positionCategory = builder.getOrCreateCategory(Component.translatable("category.anaku_status_bars.position"));
 
@@ -32,7 +34,7 @@ public class Config{
         mainCategory.addEntry(vanillaTextures);
 
         for (IHudElement hudElement : RenderHudHelper.getHudElementRegistry()) {
-            hudElement.registerSettings(mainCategory, iconCategory, colorCategory, alphaCategory, builder.entryBuilder());
+            hudElement.registerSettings(mainCategory, iconCategory, textCategory, colorCategory, textColorSettings, alphaCategory, builder.entryBuilder());
             AnakuStatusBarsCore.LOGGER.info("Registered settings for " + hudElement.name());
         }
 

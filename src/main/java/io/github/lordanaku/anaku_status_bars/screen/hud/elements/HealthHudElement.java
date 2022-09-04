@@ -63,6 +63,17 @@ public class HealthHudElement implements IHudElement {
     }
 
     @Override
+    public void renderText(PoseStack poseStack) {
+        assert Minecraft.getInstance().player != null; Player player = Minecraft.getInstance().player;
+        if (player.hasEffect(MobEffects.ABSORPTION) && player.getAbsorptionAmount() > 0 && Settings.shouldRenderSettings.get(HEALTH.name() + "_absorption")) {
+            RenderHudFunctions.drawText(poseStack, String.valueOf(Math.round(player.getHealth() + player.getAbsorptionAmount())), getSide(), shouldRenderIcon(), RenderHudHelper.getPosYMod(getSide()),
+                    Settings.textColorSettings.get(HEALTH.name() + "_absorption"), 81);
+        } else {
+            RenderHudFunctions.drawText(poseStack, String.valueOf(Math.round(player.getHealth())), getSide(), shouldRenderIcon(), RenderHudHelper.getPosYMod(getSide()), Settings.textColorSettings.get(HEALTH.name()), 81);
+        }
+    }
+
+    @Override
     public boolean getSide() {
         return this.renderSide;
     }
@@ -84,7 +95,12 @@ public class HealthHudElement implements IHudElement {
     }
 
     @Override
-    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory colorCategory, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
+    public boolean shouldRenderText() {
+        return shouldRender() && Settings.shouldRenderTextSettings.get(HEALTH.name());
+    }
+
+    @Override
+    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory textCategory, ConfigCategory colorCategory, ConfigCategory textColorSettings, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
         BooleanListEntry enableHealthBar = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_health_bar"), Settings.shouldRenderSettings.get(HEALTH.name()))
                 .setDefaultValue(HEALTH.shouldRender())
                 .setSaveConsumer(newValue -> Settings.shouldRenderSettings.replace(HEALTH.name(), newValue))
@@ -97,11 +113,23 @@ public class HealthHudElement implements IHudElement {
                 .build();
         iconCategory.addEntry(enableHealthIcon);
 
+        BooleanListEntry enableHealthText = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_health_text"), Settings.shouldRenderTextSettings.get(HEALTH.name()))
+                .setDefaultValue(HEALTH.shouldRenderText())
+                .setSaveConsumer(newValue -> Settings.shouldRenderTextSettings.replace(HEALTH.name(), newValue))
+                .build();
+        textCategory.addEntry(enableHealthText);
+
         ColorEntry healthBarColor = builder.startColorField(Component.translatable("option.anaku_status_bars.health_bar_color"), Settings.colorSettings.get(HEALTH.name()))
                 .setDefaultValue(HEALTH.color())
                 .setSaveConsumer(newValue -> Settings.colorSettings.replace(HEALTH.name(), newValue))
                 .build();
         colorCategory.addEntry(healthBarColor);
+
+        ColorEntry healthTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.health_text_color"), Settings.textColorSettings.get(HEALTH.name()))
+                .setDefaultValue(HEALTH.color())
+                .setSaveConsumer(newValue -> Settings.textColorSettings.replace(HEALTH.name(), newValue))
+                .build();
+        textColorSettings.addEntry(healthTextColor);
 
         FloatListEntry healthBarAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.health_bar_alpha"), Settings.alphaSettings.get(HEALTH.name()))
                 .setDefaultValue(HEALTH.alpha())
@@ -123,6 +151,12 @@ public class HealthHudElement implements IHudElement {
                 .setSaveConsumer(newValue -> Settings.colorSettings.replace(HEALTH.name() + "_absorption", newValue))
                 .build();
         colorCategory.addEntry(healthAbsorptionBarColor);
+
+        ColorEntry healthAbsorptionTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.health_absorption_text_color"), Settings.textColorSettings.get(HEALTH.name() + "_absorption"))
+                .setDefaultValue(Settings.ABSORPTION_COLOR_DEFAULT)
+                .setSaveConsumer(newValue -> Settings.textColorSettings.replace(HEALTH.name() + "_absorption", newValue))
+                .build();
+        textColorSettings.addEntry(healthAbsorptionTextColor);
 
         FloatListEntry healthAbsorptionBarAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.health_absorption_bar_alpha"), Settings.alphaSettings.get(HEALTH.name() + "_absorption"))
                 .setDefaultValue(HEALTH.alpha())

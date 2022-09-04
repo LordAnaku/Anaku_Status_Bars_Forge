@@ -43,6 +43,16 @@ public class ConfigFileHandler {
                 }
             }
         }
+        if(root.has("text_color_settings")) {
+            JsonObject object = root.get("text_color_settings").getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                if (Settings.textColorSettings.containsKey(entry.getKey())) {
+                    Settings.textColorSettings.replace(entry.getKey(), entry.getValue().getAsInt());
+                } else {
+                    Settings.textColorSettings.put(entry.getKey(), entry.getValue().getAsInt());
+                }
+            }
+        }
         if(root.has("alpha_settings")) {
             JsonObject object = root.get("alpha_settings").getAsJsonObject();
             for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
@@ -60,6 +70,16 @@ public class ConfigFileHandler {
                     Settings.shouldRenderIconSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
                 } else {
                     Settings.shouldRenderIconSettings.put(entry.getKey(), entry.getValue().getAsBoolean());
+                }
+            }
+        }
+        if(root.has("render_text_settings")) {
+            JsonObject object = root.get("render_text_settings").getAsJsonObject();
+            for (Map.Entry<String, JsonElement> entry : object.entrySet()) {
+                if (Settings.shouldRenderTextSettings.containsKey(entry.getKey())) {
+                    Settings.shouldRenderTextSettings.replace(entry.getKey(), entry.getValue().getAsBoolean());
+                } else {
+                    Settings.shouldRenderTextSettings.put(entry.getKey(), entry.getValue().getAsBoolean());
                 }
             }
         }
@@ -87,8 +107,10 @@ public class ConfigFileHandler {
         /* * Save settings * */
         root.add("render_settings", gson.toJsonTree(Settings.shouldRenderSettings));
         root.add("color_settings", gson.toJsonTree(Settings.colorSettings));
+        root.add("text_color_settings", gson.toJsonTree(Settings.textColorSettings));
         root.add("alpha_settings", gson.toJsonTree(Settings.alphaSettings));
         root.add("render_icon_settings", gson.toJsonTree(Settings.shouldRenderIconSettings));
+        root.add("render_text_settings", gson.toJsonTree(Settings.shouldRenderTextSettings));
         root.add("render_side", gson.toJsonTree(Settings.sideOrderSettings));
         root.add("offsets", gson.toJsonTree(Settings.positionSettings));
         root.addProperty("enable_vanilla_textures", Settings.shouldUseVanillaTextures);

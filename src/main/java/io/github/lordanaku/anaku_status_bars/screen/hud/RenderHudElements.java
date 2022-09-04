@@ -36,6 +36,14 @@ public class RenderHudElements {
                         RenderHudHelper.setPosYMod(hudElement.getSide(), -yModIncrement);
                     }
                 }
+
+                RenderHudHelper.resetIncrements();
+                for (IHudElement hudElement : RenderHudHelper.getHudElementRegistry()) {
+                    if (hudElement.shouldRenderText()) {
+                        hudElement.renderText(poseStack);
+                        RenderHudHelper.setPosYMod(hudElement.getSide(), -yModIncrement);
+                    }
+                }
             }
         }
     });

@@ -57,6 +57,17 @@ public class FoodHudElement implements IHudElement {
     }
 
     @Override
+    public void renderText(PoseStack poseStack) {
+        assert Minecraft.getInstance().player != null; Player player = Minecraft.getInstance().player;
+        if (Settings.shouldRenderSettings.get(FOOD.name() + "_saturation") && player.getFoodData().getSaturationLevel() > 0) {
+            RenderHudFunctions.drawText(poseStack, String.valueOf(Math.round(player.getFoodData().getFoodLevel() + player.getFoodData().getSaturationLevel())), getSide(), shouldRenderIcon(), getPosYMod(getSide()),
+                    Settings.textColorSettings.get(FOOD.name() + "_saturation"), 81);
+        } else {
+            RenderHudFunctions.drawText(poseStack, String.valueOf(player.getFoodData().getFoodLevel()), getSide(), shouldRenderIcon(), getPosYMod(getSide()), Settings.textColorSettings.get(FOOD.name()), 81);
+        }
+    }
+
+    @Override
     public boolean getSide() {
         return this.renderSide;
     }
@@ -78,7 +89,12 @@ public class FoodHudElement implements IHudElement {
     }
 
     @Override
-    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory colorCategory, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
+    public boolean shouldRenderText() {
+        return shouldRender() && Settings.shouldRenderTextSettings.get(FOOD.name());
+    }
+
+    @Override
+    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory textCategory, ConfigCategory colorCategory, ConfigCategory textColorSettings, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
         /* * Main Food Bar * */
         BooleanListEntry enableFoodBar = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_food_bar"), Settings.shouldRenderSettings.get(FOOD.name()))
                 .setDefaultValue(FOOD.shouldRender())
@@ -92,11 +108,23 @@ public class FoodHudElement implements IHudElement {
                 .build();
         iconCategory.addEntry(enableFoodIcon);
 
+        BooleanListEntry enableFoodText = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_food_text"), Settings.shouldRenderTextSettings.get(FOOD.name()))
+                .setDefaultValue(FOOD.shouldRenderText())
+                .setSaveConsumer(newValue -> Settings.shouldRenderTextSettings.replace(FOOD.name(), newValue))
+                .build();
+        textCategory.addEntry(enableFoodText);
+
         ColorEntry foodColor = builder.startColorField(Component.translatable("option.anaku_status_bars.food_color"), Settings.colorSettings.get(FOOD.name()))
                 .setDefaultValue(FOOD.color())
                 .setSaveConsumer(newValue -> Settings.colorSettings.replace(FOOD.name(), newValue))
                 .build();
         colorCategory.addEntry(foodColor);
+
+        ColorEntry foodTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.food_text_color"), Settings.textColorSettings.get(FOOD.name()))
+                .setDefaultValue(FOOD.color())
+                .setSaveConsumer(newValue -> Settings.textColorSettings.replace(FOOD.name(), newValue))
+                .build();
+        textColorSettings.addEntry(foodTextColor);
 
         FloatListEntry foodAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.food_alpha"), Settings.alphaSettings.get(FOOD.name()))
                 .setDefaultValue(FOOD.alpha())
@@ -119,6 +147,12 @@ public class FoodHudElement implements IHudElement {
                 .setSaveConsumer(newValue -> Settings.colorSettings.replace(FOOD.name() + "_saturation", newValue))
                 .build();
         colorCategory.addEntry(saturationColor);
+
+        ColorEntry saturationTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.saturation_text_color"), Settings.textColorSettings.get(FOOD.name() + "_saturation"))
+                .setDefaultValue(Settings.SATURATION_COLOR_DEFAULT)
+                .setSaveConsumer(newValue -> Settings.textColorSettings.replace(FOOD.name() + "_saturation", newValue))
+                .build();
+        textColorSettings.addEntry(saturationTextColor);
 
         FloatListEntry saturationAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.saturation_alpha"), Settings.alphaSettings.get(FOOD.name() + "_saturation"))
                 .setDefaultValue(FOOD.alpha())

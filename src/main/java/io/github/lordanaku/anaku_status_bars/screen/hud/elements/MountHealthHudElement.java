@@ -36,6 +36,12 @@ public class MountHealthHudElement implements IHudElement {
     }
 
     @Override
+    public void renderText(PoseStack poseStack) {
+        LivingEntity mountEntity = getRiddenEntity(); assert mountEntity != null;
+        RenderHudFunctions.drawText(poseStack, String.valueOf(Math.round(mountEntity.getHealth())), getSide(), shouldRenderIcon(), RenderHudHelper.getPosYMod(getSide()), Settings.textColorSettings.get(MOUNT_HEALTH.name()), 81);
+    }
+
+    @Override
     public boolean getSide() {
         return this.renderSide;
     }
@@ -59,7 +65,12 @@ public class MountHealthHudElement implements IHudElement {
     }
 
     @Override
-    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory colorCategory, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
+    public boolean shouldRenderText() {
+        return shouldRender() && Settings.shouldRenderTextSettings.get(MOUNT_HEALTH.name());
+    }
+
+    @Override
+    public void registerSettings(ConfigCategory mainCategory, ConfigCategory iconCategory, ConfigCategory textCategory, ConfigCategory colorCategory, ConfigCategory textColorSettings, ConfigCategory alphaCategory, ConfigEntryBuilder builder) {
         BooleanListEntry enableMountHealthBar = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_mount_health_bar"), Settings.shouldRenderSettings.get(MOUNT_HEALTH.name()))
                 .setDefaultValue(MOUNT_HEALTH.shouldRender())
                 .setSaveConsumer(value -> Settings.shouldRenderSettings.replace(MOUNT_HEALTH.name(), value))
@@ -72,11 +83,23 @@ public class MountHealthHudElement implements IHudElement {
                 .build();
         iconCategory.addEntry(enableMountHealthIcon);
 
+        BooleanListEntry enableMountHealthText = builder.startBooleanToggle(Component.translatable("option.anaku_status_bars.enable_mount_health_text"), Settings.shouldRenderTextSettings.get(MOUNT_HEALTH.name()))
+                .setDefaultValue(MOUNT_HEALTH.shouldRenderText())
+                .setSaveConsumer(value -> Settings.shouldRenderTextSettings.replace(MOUNT_HEALTH.name(), value))
+                .build();
+        textCategory.addEntry(enableMountHealthText);
+
         ColorEntry mountHealthColor = builder.startColorField(Component.translatable("option.anaku_status_bars.mount_health_color"), Settings.colorSettings.get(MOUNT_HEALTH.name()))
                 .setDefaultValue(MOUNT_HEALTH.color())
                 .setSaveConsumer(value -> Settings.colorSettings.replace(MOUNT_HEALTH.name(), value))
                 .build();
         colorCategory.addEntry(mountHealthColor);
+
+        ColorEntry mountHealthTextColor = builder.startColorField(Component.translatable("option.anaku_status_bars.mount_health_text_color"), Settings.textColorSettings.get(MOUNT_HEALTH.name()))
+                .setDefaultValue(MOUNT_HEALTH.color())
+                .setSaveConsumer(value -> Settings.textColorSettings.replace(MOUNT_HEALTH.name(), value))
+                .build();
+        textColorSettings.addEntry(mountHealthTextColor);
 
         FloatListEntry mountHealthAlpha = builder.startFloatField(Component.translatable("option.anaku_status_bars.mount_health_alpha"), Settings.alphaSettings.get(MOUNT_HEALTH.name()))
                 .setDefaultValue(MOUNT_HEALTH.alpha())
@@ -95,20 +118,18 @@ public class MountHealthHudElement implements IHudElement {
 
     private static LivingEntity getRiddenEntity() {
         Player playerEntity = Minecraft.getInstance().player;
-        assert playerEntity != null;
-        Entity ridingEntity = playerEntity.getVehicle();
-        if (ridingEntity == null) return null;
-        if (ridingEntity instanceof LivingEntity) {
-            return (LivingEntity) ridingEntity;
+        assert playerEntity != null; Entity mountEntity = playerEntity.getVehicle();
+        if (mountEntity == null) return null;
+        if (mountEntity instanceof LivingEntity) {
+            return (LivingEntity) mountEntity;
         }
         return null;
     }
 
     private static int getMountHealthProgress() {
-        LivingEntity ridingEntity = getRiddenEntity();
-        assert ridingEntity != null;
-        float mHealth  = ridingEntity.getHealth();
-        float mHealthMax = ridingEntity.getMaxHealth();
+        LivingEntity mountEntity = getRiddenEntity(); assert mountEntity != null;
+        float mHealth  = mountEntity.getHealth();
+        float mHealthMax = mountEntity.getMaxHealth();
         float ratio = Math.min(1, Math.max(0, mHealth / mHealthMax));
         int maxProgress = 81;
         return (int) Math.min(maxProgress, Math.ceil(ratio * maxProgress));

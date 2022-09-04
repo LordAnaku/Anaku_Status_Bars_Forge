@@ -10,6 +10,6 @@ package io.github.lordanaku.anaku_status_bars.utils.records;
  * @param color The color of the Hud Element.
  * @param alpha The alpha of the Hud Element.
  */
-public record HudElementType(String name, boolean shouldRender, boolean side, boolean shouldRenderIcon, int color, float alpha) {
+public record HudElementType(String name, boolean shouldRender, boolean side, boolean shouldRenderIcon, boolean shouldRenderText, int color, float alpha) {
 
 }
