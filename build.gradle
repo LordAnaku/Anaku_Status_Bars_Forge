@@ -7,7 +7,7 @@ plugins {
 
 
 group = 'io.github.lordanaku'
-version = '1.0.0-1.19.2'
+version = '1.0.1-1.19.2'
 
 java {
     archivesBaseName = 'anaku_status_bars'

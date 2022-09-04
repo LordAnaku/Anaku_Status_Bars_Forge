@@ -39,8 +39,10 @@ public class RenderHudElements {
 
                 RenderHudHelper.resetIncrements();
                 for (IHudElement hudElement : RenderHudHelper.getHudElementRegistry()) {
-                    if (hudElement.shouldRenderText()) {
-                        hudElement.renderText(poseStack);
+                    if (hudElement.shouldRender()) {
+                        if (hudElement.shouldRenderText()) {
+                            hudElement.renderText(poseStack);
+                        }
                         RenderHudHelper.setPosYMod(hudElement.getSide(), -yModIncrement);
                     }
                 }
